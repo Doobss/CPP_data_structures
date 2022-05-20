@@ -11,13 +11,12 @@ template <typename T>
 class BinTree
 {
   Node<T> *head;
-
   T sum;
   int nodes;
   T(*comparison)
   (T a, T b);
 
-  void traverse(Node<T> *base, Node<T> *added)
+  bool insert(Node<T> *base, Node<T> *added)
   {
     Node<T> *left = base->left;
     Node<T> *right = base->right;
@@ -29,12 +28,15 @@ class BinTree
       if (right != NULL)
       {
         std::cout << "trav right " << '\n';
-        traverse(right, added);
+        return insert(right, added);
       }
       else
       {
         base->right = added;
+        nodes++;
+        sum += added->data;
         std::cout << "ADDED right " << added->data << '\n';
+        return true;
       }
     }
     if (compareValue < 0)
@@ -42,19 +44,56 @@ class BinTree
       if (left != NULL)
       {
         std::cout << "trav left " << '\n';
-        traverse(left, added);
+        return insert(left, added);
       }
       else
       {
         base->left = added;
+        nodes++;
+        sum += added->data;
         std::cout << "ADDED left " << added->data << '\n';
+        return true;
       }
     }
-    if (compareValue == 0)
+
+    std::cout << "EQUAL not added " << added->data << '\n'
+              << '\n';
+    return false;
+  };
+
+  bool includes(Node<T> *searchNode, T data)
+  {
+    std::cout << "Node data " << searchNode->data << " search Value " << data << '\n';
+    if (data == searchNode->data)
     {
-      std::cout << '\n'
-                << "EQUAL not added " << added->data << '\n';
-    };
+      return true;
+    }
+    else
+    {
+      int compareValue = (*comparison)(searchNode->data, data);
+      if (compareValue > 0)
+      {
+        if (searchNode->right)
+        {
+          return includes(searchNode->right, data);
+        }
+        else
+        {
+          return false;
+        }
+      }
+      else
+      {
+        if (searchNode->left)
+        {
+          return includes(searchNode->left, data);
+        }
+        else
+        {
+          return false;
+        }
+      }
+    }
   };
 
 public:
@@ -66,7 +105,7 @@ public:
     comparison = compareFunc;
   };
 
-  void insert(T data)
+  bool insert(T data)
   {
     if (head != NULL)
     {
@@ -78,12 +117,7 @@ public:
       std::cout << '\n'
                 << "Begin Insert " << '\n'
                 << '\n';
-      traverse(head, newNode);
-      std::cout << '\n'
-                << "End Insert " << '\n'
-                << '\n';
-      nodes++;
-      sum += data;
+      return insert(head, newNode);
     }
     else
     {
@@ -91,8 +125,19 @@ public:
       head->data = data;
       head->left = NULL;
       head->right = NULL;
-      nodes++;
-      sum += data;
+      return true;
     }
-  };
+  }
+
+  bool includes(T data)
+  {
+    return includes(head, data);
+  }
+
+  void stats()
+  {
+    std::cout << "Sum " << sum << '\n';
+    std::cout << "Nodes " << nodes << '\n';
+    std::cout << "Head val " << head->data << '\n';
+  }
 };
