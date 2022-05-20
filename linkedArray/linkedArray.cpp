@@ -3,13 +3,15 @@
 #include "node.cpp"
 
 template <typename T>
-class Array
+class LinkedArray
 {
 
+  Node<T> *head;
+  Node<T> *tail;
   int size;
   int storeSize;
   int minSize;
-  T *store;
+  Node<T> *store;
 
   void manageMemory()
   {
@@ -28,7 +30,7 @@ class Array
 
     if (newStoreSize != storeSize)
     {
-      T *nextStore = new T[newStoreSize];
+      Node<T> *nextStore = new Node<T>[newStoreSize];
       for (int i = 0; i < size; i++)
       {
         nextStore[i] = store[i];
@@ -40,45 +42,104 @@ class Array
   };
 
 public:
-  Array()
+  LinkedArray()
   {
     size = 0;
     minSize = 4;
     storeSize = 8;
-    store = new T[storeSize];
+    store = new Node<T>[storeSize];
     // std::cout << "store " << store << '\n';
+    head = NULL;
+    tail = NULL;
   };
   ;
   int push(T value)
   {
-    store[size] = value;
+
+    Node<T> *nextTail = new Node<T>;
+    nextTail->prev = tail;
+    nextTail->next = NULL;
+    nextTail->value = value;
+    if (tail != NULL)
+    {
+      tail->next = nextTail;
+    }
+
+    tail = nextTail;
+    store[size] = *tail;
     size++;
+
+    if (head == NULL)
+    {
+      head = tail;
+    }
+
     manageMemory();
     return size;
   };
   T pop()
   {
-    T value, empty;
-    value = store[size];
-    store[size] = empty;
-    size--;
-    manageMemory();
-    return value;
+    if (tail != NULL)
+    {
+      T value = tail->value;
+      Node<T> *nextTail = tail->prev;
+      nextTail->next = NULL;
+      delete tail;
+      Node<T> arrTail = store[size];
+      arrTail.next = NULL;
+      arrTail.prev = NULL;
+      T empty;
+      arrTail.value = empty;
+      // Node<T> *nextArrTail = new Node<T>;
+      // store[size] = *nextArrTail;
+      tail = nextTail;
+      size--;
+      manageMemory();
+      return value;
+    }
+    else
+    {
+      T empty;
+      return empty;
+    }
   };
   int shift(T value)
   {
-    std::cout << "SHIFT NOT IMP YET";
+    Node<T> *nextHead = new Node<T>;
+    nextHead->prev = NULL;
+    nextHead->next = head;
+    nextHead->value = value;
+    if (head != NULL)
+    {
+      head->prev = nextHead;
+    }
+    head = nextHead;
     size++;
+    if (tail == NULL)
+    {
+      tail = head;
+    }
+    manageMemory();
     return size;
   };
   T unShift()
   {
-    T value, empty;
-    value = store[0];
-    std::cout << "UNSHIFT NOT IMP YET";
-    size--;
-    manageMemory();
-    return value;
+    if (head != NULL)
+    {
+      T value = head->value;
+      Node<T> *nextHead = head->next;
+      nextHead->prev = NULL;
+      delete head;
+      head = nextHead;
+      size--;
+      manageMemory();
+      return value;
+    }
+    else
+    {
+      T empty;
+      return empty;
+    }
   };
   int length()
   {
@@ -88,7 +149,8 @@ public:
   {
     if (size - 1 > valueIndex)
     {
-      return store[valueIndex];
+      Node<T> LinkedArrayNode = store[valueIndex];
+      return LinkedArrayNode.value;
     }
     else
     {
@@ -108,31 +170,32 @@ public:
 
   void each(void (*funcPtr)(T value, int index))
   {
-    T value;
+    Node<T> stored;
     for (int i = 0; size > i; i++)
     {
-      value = store[i];
-      (*funcPtr)(value, i);
+      stored = store[i];
+      (*funcPtr)(stored.value, i);
     }
   };
 
-  Array<T> map(T (*funcPtr)(T value, int index))
+  LinkedArray<T> map(T (*funcPtr)(T value, int index))
   {
-    Array<T> newArray;
-    T value, newValue;
+    LinkedArray<T> newLinkedArray;
+    T newValue;
+    Node<T> stored;
     for (int i = 0; size > i; i++)
     {
-      value = store[i];
-      newValue = (*funcPtr)(value, i);
-      newArray.push(newValue);
+      stored = store[i];
+      newValue = (*funcPtr)(stored.value, i);
+      newLinkedArray.push(newValue);
     }
-    return newArray;
+    return newLinkedArray;
   };
 };
 
 // void printStore()
 // {
-//   Ystored;
+//   Node<T> stored;
 //   int i = 0;
 //   do
 //   {
@@ -147,7 +210,7 @@ public:
 
 // void printTotalStore()
 // {
-//   Ystored;
+//   Node<T> stored;
 //   int i = 0;
 //   do
 //   {
