@@ -32,6 +32,22 @@ class DoublyLinked
     }
   }
 
+  bool includes(T *value, Node<T> *node, bool (*filterFunc)(T *a, T *b))
+  {
+    if ((*filterFunc)(value, node->value))
+    {
+      return true;
+    }
+    else
+    {
+      if (node->next)
+      {
+        return includes(value, node->next, filterFunc);
+      }
+      return false;
+    }
+  }
+
 public:
   DoublyLinked()
   {
@@ -40,13 +56,20 @@ public:
     tail = NULL;
   };
   ;
-  int push(T value)
+  int push(T *newValue)
   {
+    std::cout << '\n'
+              << "PUSHING new value" << '\n';
+    std::cout << "newValue data " << newValue->data << '\n';
+    std::cout << "newValue id " << newValue->id << '\n';
+    std::cout << "newValue parent Id " << newValue->parent->id << '\n';
+    // std::cout << "tail " << tail << '\n';
+    // std::cout << "head " << head << '\n';
 
     Node<T> *nextTail = new Node<T>;
     nextTail->prev = tail;
     nextTail->next = NULL;
-    nextTail->value = value;
+    nextTail->value = newValue;
     if (tail != NULL)
     {
       tail->next = nextTail;
@@ -63,7 +86,7 @@ public:
   {
     if (tail != NULL)
     {
-      T value = tail->value;
+      T *value = tail->value;
       Node<T> *nextTail = tail->prev;
       nextTail->next = NULL;
       delete tail;
@@ -82,7 +105,7 @@ public:
     Node<T> *nextHead = new Node<T>;
     nextHead->prev = NULL;
     nextHead->next = head;
-    nextHead->value = value;
+    nextHead->value = *value;
     if (head != NULL)
     {
       head->prev = nextHead;
@@ -99,7 +122,7 @@ public:
   {
     if (head != NULL)
     {
-      T value = head->value;
+      T *value = head->value;
       Node<T> *nextHead = head->next;
       nextHead->prev = NULL;
       delete head;
@@ -121,6 +144,35 @@ public:
   bool includes(T value, bool (*newFilterFunc)(T a, T b) = filter<T>)
   {
     return includes(value, head, newFilterFunc);
+  }
+  bool includes(T *value, bool (*newFilterFunc)(T *a, T *b) = filter<T>)
+  {
+    return includes(value, head, newFilterFunc);
+  }
+
+  void each(void (*newFilterFunc)(T *a))
+  {
+    includes(head, newFilterFunc);
+  }
+  void each(void (*newFilterFunc)(T a))
+  {
+    includes(head, newFilterFunc);
+  }
+
+  DoublyLinked<T> *gather(T *(*gatherFunc)(T *a))
+  {
+    DoublyLinked<T> *gathered = new DoublyLinked<T>;
+    Node<T> *listNode = head;
+    while (listNode)
+    {
+      T *gatheredValue = gatherFunc(listNode->value);
+      if (gatheredValue)
+      {
+        gathered->push(gatheredValue);
+      }
+      listNode = listNode->next;
+    }
+    return gathered;
   }
   void print()
   {

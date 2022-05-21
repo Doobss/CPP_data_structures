@@ -7,92 +7,127 @@ C compare(C a, C b)
 };
 
 template <typename T>
-
 class BinTree
 {
   Node<T> *head;
   T sum;
-  int nodes;
-  T(*comparison)
+  long nodes;
+  T (*comparison)
   (T a, T b);
 
   bool insert(Node<T> *base, Node<T> *added)
   {
-    Node<T> *left = base->left;
-    Node<T> *right = base->right;
-    std::cout << "base data " << base->data << " added data " << added->data << '\n';
-
-    T compareValue = (*comparison)(base->data, added->data);
-    if (compareValue > 0)
+    try
     {
-      if (right != NULL)
-      {
-        std::cout << "trav right " << '\n';
-        return insert(right, added);
-      }
-      else
-      {
-        base->right = added;
-        nodes++;
-        sum += added->data;
-        std::cout << "ADDED right " << added->data << '\n';
-        return true;
-      }
-    }
-    if (compareValue < 0)
-    {
-      if (left != NULL)
-      {
-        std::cout << "trav left " << '\n';
-        return insert(left, added);
-      }
-      else
-      {
-        base->left = added;
-        nodes++;
-        sum += added->data;
-        std::cout << "ADDED left " << added->data << '\n';
-        return true;
-      }
-    }
+      Node<T> *left = base->left;
+      Node<T> *right = base->right;
+      // std::cout << "base data " << base->data << " added data " << added->data << '\n';
 
-    std::cout << "EQUAL not added " << added->data << '\n'
-              << '\n';
-    return false;
+      T compareValue = (*comparison)(base->data, added->data);
+      if (compareValue > 0)
+      {
+        if (right != NULL)
+        {
+          // std::cout << "trav right " << '\n';
+          return insert(right, added);
+        }
+        else
+        {
+          base->right = added;
+          nodes++;
+          sum += added->data;
+          // std::cout << "ADDED right " << added->data << '\n';
+          return true;
+        }
+      }
+      if (compareValue < 0)
+      {
+        if (left != NULL)
+        {
+          // std::cout << "trav left " << '\n';
+          return insert(left, added);
+        }
+        else
+        {
+          base->left = added;
+          nodes++;
+          sum += added->data;
+          // std::cout << "ADDED left " << added->data << '\n';
+          return true;
+        }
+      }
+
+      // std::cout << "EQUAL not added " << added->data << '\n'
+      // << '\n';
+      return false;
+    }
+    catch (std::logic_error &e)
+    {
+      std::cerr << "LOGIC Error in BinTree<T>::insert(Node<T> *base, Node<T> *added)" << e.what() << '\n';
+      return false;
+    }
+    catch (std::runtime_error &e)
+    {
+      std::cerr << "RUNTIME Error in BinTree<T>::insert(Node<T> *base, Node<T> *added)" << e.what() << '\n';
+      return false;
+    }
+    catch (std::exception &e)
+    {
+      std::cerr << "Error in BinTree<T>::insert(Node<T> *base, Node<T> *added)" << e.what() << '\n';
+      return false;
+    }
   };
 
   bool includes(Node<T> *searchNode, T data)
   {
-    std::cout << "Node data " << searchNode->data << " search Value " << data << '\n';
-    if (data == searchNode->data)
+    try
     {
-      return true;
-    }
-    else
-    {
-      int compareValue = (*comparison)(searchNode->data, data);
-      if (compareValue > 0)
+      std::cout << "Node data " << searchNode->data << " search Value " << data << '\n';
+      if (data == searchNode->data)
       {
-        if (searchNode->right)
-        {
-          return includes(searchNode->right, data);
-        }
-        else
-        {
-          return false;
-        }
+        return true;
       }
       else
       {
-        if (searchNode->left)
+        int compareValue = (*comparison)(searchNode->data, data);
+        if (compareValue > 0)
         {
-          return includes(searchNode->left, data);
+          if (searchNode->right)
+          {
+            return includes(searchNode->right, data);
+          }
+          else
+          {
+            return false;
+          }
         }
         else
         {
-          return false;
+          if (searchNode->left)
+          {
+            return includes(searchNode->left, data);
+          }
+          else
+          {
+            return false;
+          }
         }
       }
+    }
+    catch (std::logic_error &e)
+    {
+      std::cerr << "LOGIC Error in BinTree<T>::includes(Node<T> *searchNode, T data)" << e.what() << '\n';
+      return false;
+    }
+    catch (std::runtime_error &e)
+    {
+      std::cerr << "RUNTIME Error in BinTree<T>::includes(Node<T> *searchNode, T data)" << e.what() << '\n';
+      return false;
+    }
+    catch (std::exception &e)
+    {
+      std::cerr << "Error in BinTree<T>::includes(Node<T> *searchNode, T data)" << e.what() << '\n';
+      return false;
     }
   };
 
@@ -107,31 +142,50 @@ public:
 
   bool insert(T data)
   {
-    if (head != NULL)
+    try
     {
-      Node<T> *newNode;
-      newNode = new Node<T>;
-      newNode->data = data;
-      newNode->left = NULL;
-      newNode->right = NULL;
-      std::cout << '\n'
-                << "Begin Insert " << '\n'
-                << '\n';
-      return insert(head, newNode);
+      if (head != NULL)
+      {
+        // std::cout << '\n'
+        //           << "Begin Insert " << '\n'
+        //           << '\n';
+        Node<T> *newNode;
+        newNode = new Node<T>;
+        newNode->data = data;
+        newNode->left = NULL;
+        newNode->right = NULL;
+        return insert(head, newNode);
+      }
+      else
+      {
+
+        head = new Node<T>;
+        head->data = data;
+        head->left = NULL;
+        head->right = NULL;
+        nodes++;
+        sum += head->data;
+        return true;
+      }
     }
-    else
+    catch (std::exception &e)
     {
-      head = new Node<T>;
-      head->data = data;
-      head->left = NULL;
-      head->right = NULL;
-      return true;
+      std::cerr << "Error in BinTree<T>::insert(T data) " << e.what() << '\n';
+      return false;
     }
   }
 
   bool includes(T data)
   {
-    return includes(head, data);
+    try
+    {
+      return includes(head, data);
+    }
+    catch (std::exception &e)
+    {
+      std::cerr << "Error in BinTree<T>::includes(T data) " << e.what() << '\n';
+      return false;
+    }
   }
 
   void stats()

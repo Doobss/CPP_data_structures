@@ -1,6 +1,6 @@
-#include "binTree.cpp"
+#include "binIdTree.cpp"
 
-bool searchForValues(BinTree<int> bt)
+bool searchForValues(BinIdTree<int, int> bt)
 {
   try
   {
@@ -18,7 +18,9 @@ bool searchForValues(BinTree<int> bt)
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::cin >> search;
     }
+
     std::cout << "Finised search " << '\n';
+    bt.stats();
     return true;
   }
   catch (std::runtime_error &e)
@@ -28,7 +30,7 @@ bool searchForValues(BinTree<int> bt)
   }
 };
 
-bool runInsertions(BinTree<int> bt)
+bool runInsertions(BinIdTree<int, int> bt)
 {
   try
   {
@@ -49,7 +51,6 @@ bool runInsertions(BinTree<int> bt)
       // std::cout << "Inserts left " << insertions << '\n';
     }
 
-    bt.stats();
     searchForValues(bt);
     return true;
   }
@@ -66,7 +67,7 @@ int main()
   try
   {
     bool finishedFunc;
-    BinTree<int> bt;
+    BinIdTree<int, int> bt;
     finishedFunc = runInsertions(bt);
     // finishedFunc = searchForValues(bt);
   }
