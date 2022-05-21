@@ -1,14 +1,11 @@
 #include "binTree.cpp"
 
-bool searchForValues(BinTree<int> bt)
-{
-  try
-  {
+bool searchForValues(BinTree<int> bt) {
+  try {
     bool found, search;
     int searchValue;
     search = true;
-    while (search)
-    {
+    while (search) {
       std::cout << "Please enter a value to searchfor " << '\n';
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       std::cin >> searchValue;
@@ -20,29 +17,23 @@ bool searchForValues(BinTree<int> bt)
     }
     std::cout << "Finised search " << '\n';
     return true;
-  }
-  catch (std::runtime_error &e)
-  {
+  } catch (std::runtime_error &e) {
     std::cerr << "Error in searchForValues" << e.what() << '\n';
     return false;
   }
 };
 
-bool runInsertions(BinTree<int> bt)
-{
-  try
-  {
+bool runInsertions(BinTree<int> bt) {
+  try {
     int insertions, range, value;
     bool inserted;
     std::cout << "Please Enter the number of insertions" << '\n';
     std::cin >> insertions;
     std::cout << "Please Enter the range of random integers to choose from." << '\n';
     std::cin >> range;
-    while (insertions--)
-    {
+    while (insertions--) {
       inserted = false;
-      while (!inserted)
-      {
+      while (!inserted) {
         value = rand() % range;
         inserted = bt.insert(value);
       }
@@ -54,24 +45,19 @@ bool runInsertions(BinTree<int> bt)
     return true;
   }
 
-  catch (std::runtime_error &e)
-  {
+  catch (std::runtime_error &e) {
     std::cerr << "Error in runInsertions" << e.what() << '\n';
     return false;
   }
 }
 
-int main()
-{
-  try
-  {
+int main() {
+  try {
     bool finishedFunc;
     BinTree<int> bt;
     finishedFunc = runInsertions(bt);
     // finishedFunc = searchForValues(bt);
-  }
-  catch (std::runtime_error &e)
-  {
+  } catch (std::runtime_error &e) {
     std::cout << "Error in main" << e.what() << '\n';
   }
 };

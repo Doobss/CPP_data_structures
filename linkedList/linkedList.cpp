@@ -1,22 +1,19 @@
 #include <iostream>
+
 #include "node.cpp"
 
 template <typename T>
-class LinkedList
-{
-
+class LinkedList {
   struct Node<T> *head;
   int size;
 
-public:
-  LinkedList()
-  {
+ public:
+  LinkedList() {
     size = 0;
     head = NULL;
   };
 
-  int push(T value)
-  {
+  int push(T value) {
     Node<T> *nextHead = new Node<T>;
     nextHead->next = head;
     nextHead->value = value;
@@ -25,8 +22,7 @@ public:
     return size;
   };
 
-  T pop()
-  {
+  T pop() {
     T value = head->value;
     Node<T> *nextHead = head->next;
     delete head;
@@ -34,27 +30,26 @@ public:
     size--;
     return value;
   };
-  int length()
-  {
+
+  int length() {
     return size;
   };
-  void printLength()
-  {
+
+  void printLength() {
     std::cout << "Length " << size << std::endl;
   };
-  void printHead()
-  {
+
+  void printHead() {
     Node<T> listHead = *head;
     std::cout << "listHead.value " << listHead.value << std::endl;
     std::cout << "listHead.next " << listHead.next << std::endl;
   };
-  void print()
-  {
+
+  void print() {
     std::cout << std::endl;
     Node<T> listHead = *head;
     std::cout << "list value " << listHead.value << std::endl;
-    do
-    {
+    do {
       listHead = *listHead.next;
       std::cout << "list value " << listHead.value << std::endl;
     } while (listHead.next != NULL);
@@ -63,12 +58,10 @@ public:
   };
 };
 
-int main()
-{
+int main() {
   LinkedList<int> llInt;
   LinkedList<std::string> llStr;
-  std::cout << std::endl
-            << "_____START____ " << std::endl;
+  std::cout << std::endl << "_____START____ " << std::endl;
 
   llInt.push(1);
   llInt.push(2);

@@ -1,7 +1,6 @@
 #include "tree.cpp"
 
-int main()
-{
+int main() {
   Tree<int, int> root(0);
   // root.addChild(1);
   Tree<int, int> rootChild1 = root.addChild(1);
@@ -11,13 +10,11 @@ int main()
   Tree<int, int> rootChild5 = root.addChild(6);
   Tree<int, int> rootChild6 = root.addChild(34);
   DoublyLinked<Tree<int, int>> *gathered = root.gather();
-  std::cout << '\n'
-            << "Gathered size " << gathered->length() << '\n';
+  std::cout << '\n' << "Gathered size " << gathered->length() << '\n';
 
   Tree<int, int> root1(3);
 
-  std::cout << '\n'
-            << "Includes tests " << '\n';
+  std::cout << '\n' << "Includes tests " << '\n';
   bool found;
   int value = 2;
   found = root.includes(&rootChild1);

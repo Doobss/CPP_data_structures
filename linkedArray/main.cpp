@@ -1,45 +1,39 @@
 #include <iostream>
+
 #include "array.cpp"
 
-void eachTest(int value, int index)
-{
+void eachTest(int value, int index) {
   std::cout << "EACH "
             << " value " << value << " index " << index << '\n';
 };
 
-int mapTest(int value, int index)
-{
+int mapTest(int value, int index) {
   return value + 100;
 };
 
-Array<int> generateArray()
-{
+Array<int> generateArray() {
   Array<int> newArray;
   int arrayLength, newValue, i;
   std::cout << "Please enter an array length" << '\n';
   std::cin >> arrayLength;
-  for (i = 0; arrayLength > i; i++)
-  {
-    newValue = rand() % 100; // v1 in the range 0 to 99
+  for (i = 0; arrayLength > i; i++) {
+    newValue = rand() % 100;  // v1 in the range 0 to 99
     newArray.push(newValue);
   }
   return newArray;
 };
 
-Array<int> halfArray(Array<int> toHalf)
-{
+Array<int> halfArray(Array<int> toHalf) {
   int arrayLength, halfIndex, i;
   arrayLength = toHalf.length();
   halfIndex = (arrayLength / 2);
-  for (i = 0; halfIndex > i; i++)
-  {
+  for (i = 0; halfIndex > i; i++) {
     toHalf.pop();
   }
   return toHalf;
 };
 
-int main()
-{
+int main() {
   std::cout << "_____START____ " << '\n';
   Array<int> arrInt = generateArray();
   std::cout << "Generated array length " << arrInt.length() << '\n';

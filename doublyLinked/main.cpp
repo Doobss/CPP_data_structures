@@ -1,11 +1,9 @@
 #include "doublyLinked.cpp"
 
-int main()
-{
+int main() {
   DoublyLinked<int> dlInt;
   DoublyLinked<std::string> dlStr;
-  std::cout << std::endl
-            << "_____START____ " << std::endl;
+  std::cout << std::endl << "_____START____ " << std::endl;
 
   dlInt.push(1);
   dlInt.push(2);
