@@ -1,8 +1,20 @@
 #include <iostream>
 
 template <typename V>
-struct Node {
+class BinNode {
+ public:
+  typedef BinNode<V> *BNP;
   V data;
-  struct Node<V> *left;
-  struct Node<V> *right;
+  int id;
+  BNP left;
+  BNP right;
+  BinNode(V newData, BNP newLeft = NULL, BNP newRight = NULL) {
+    data = newData;
+    id = newData;
+    left = newLeft;
+    right = newRight;
+  };
+  BNP clone() {
+    return new BinNode<V>(*this);
+  }
 };

@@ -2,12 +2,12 @@
 #include "doublyLinked.cpp"
 
 template <typename F>
-bool defaultTreeFilter(F *a, F *b) {
+bool default_tree_filter(F *a, F *b) {
   return a->data == b->data && a->id == b->id;
 };
 
 template <typename F>
-F *defaultGather(F *a) {
+F *default_gather(F *a) {
   if (a->data > 2) {
     return a;
   } else {
@@ -17,35 +17,37 @@ F *defaultGather(F *a) {
 
 template <typename D, typename I>
 class Tree {
+  typedef Tree<D, I> Tree_type;
+  typedef Tree_type *Tree_ref_type;
+  typedef Tree_ref_type (*gather_func_type)(Tree_ref_type a);
+  typedef bool (*tree_filter_type)(Tree_ref_type a, Tree_ref_type b);
+  typedef DoublyLinked<Tree_type> *children_type;
+
  public:
   I id;
   D data;
-  Tree<D, I> *parent;
-  DoublyLinked<Tree<D, I>> *children;
-  Tree(D newData, I treeId = 0, Tree<D, I> *treeParent = NULL, DoublyLinked<Tree<D, I>> *treeChildren = NULL) {
-    data = newData;
-    id = treeId;
-    parent = treeParent;
-    if (treeChildren) {
-      children = treeChildren;
-    } else {
-      children = new DoublyLinked<Tree<D, I>>;
-    }
+  Tree_ref_type parent;
+  children_type children;
+  Tree(D new_data, I tree_id = 0, Tree_ref_type tree_parent = NULL, children_type tree_children = new DoublyLinked<Tree_type>) {
+    data = new_data;
+    id = tree_id;
+    parent = tree_parent;
+    children = tree_children;
   }
 
-  Tree<D, I> addChild(D newData) {
-    I newId = id + 1 + children->length();
-    Tree<D, I> *child = new Tree<D, I>(newData, newId, this);
+  Tree_type addChild(D new_data) {
+    I new_id = id + 1 + children->length();
+    Tree_ref_type child = new Tree<D, I>(new_data, new_id, this);
     children->push(child);
     return *child;
   }
 
-  bool includes(Tree<D, I> *searchData, bool (*treeFilter)(Tree<D, I> *a, Tree<D, I> *b) = defaultTreeFilter<Tree<D, I>>) {
-    return children->includes(searchData, treeFilter);
+  bool includes(Tree_ref_type search_data, tree_filter_type tree_filter = default_tree_filter<Tree_type>) {
+    return children->includes(search_data, tree_filter);
   }
 
-  DoublyLinked<Tree<D, I>> *gather(Tree<D, I> *(gatherFunc)(Tree<D, I> *a) = defaultGather<Tree<D, I>>) {
-    return children->gather(gatherFunc);
+  children_type gather(gather_func_type gather_func = default_gather<Tree_type>) {
+    return children->gather(gather_func);
   }
 
   void print() {

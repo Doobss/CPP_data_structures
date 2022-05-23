@@ -1,18 +1,19 @@
 #include "tree.cpp"
 
 int main() {
-  Tree<int, int> root(0);
+  typedef Tree<int, int> Tree_type;
+  Tree_type root(0);
   // root.addChild(1);
-  Tree<int, int> rootChild1 = root.addChild(1);
-  Tree<int, int> rootChild2 = root.addChild(2);
-  Tree<int, int> rootChild3 = root.addChild(3);
-  Tree<int, int> rootChild4 = root.addChild(23);
-  Tree<int, int> rootChild5 = root.addChild(6);
-  Tree<int, int> rootChild6 = root.addChild(34);
-  DoublyLinked<Tree<int, int>> *gathered = root.gather();
+  Tree_type rootChild1 = root.addChild(1);
+  Tree_type rootChild2 = root.addChild(2);
+  Tree_type rootChild3 = root.addChild(3);
+  Tree_type rootChild4 = root.addChild(23);
+  Tree_type rootChild5 = root.addChild(6);
+  Tree_type rootChild6 = root.addChild(34);
+  DoublyLinked<Tree_type> *gathered = root.gather();
   std::cout << '\n' << "Gathered size " << gathered->length() << '\n';
 
-  Tree<int, int> root1(3);
+  Tree_type root1(3);
 
   std::cout << '\n' << "Includes tests " << '\n';
   bool found;

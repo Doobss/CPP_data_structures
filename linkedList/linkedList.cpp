@@ -4,10 +4,13 @@
 
 template <typename T>
 class LinkedList {
-  struct Node<T> *head;
+  typedef Node<T> *NP;
+  typedef std::function<void(NP)> each_callback;
+  typedef std::function<bool(NP)> filter_callback;
   int size;
 
  public:
+  struct Node<T> *head;
   LinkedList() {
     size = 0;
     head = NULL;
@@ -30,6 +33,30 @@ class LinkedList {
     size--;
     return value;
   };
+
+  void each(each_callback for_each) {
+    Node<T> *list_node = head;
+    while (list_node != NULL) {
+      for_each(list_node);
+      list_node = list_node->next;
+    }
+  }
+
+  LinkedList<T> *filter(filter_callback filter_func) {
+    LinkedList<T> *filtered_list = new LinkedList<T>;
+    Node<T> *list_node = head;
+    bool add_to_new_list = false;
+    while (list_node != NULL) {
+      add_to_new_list = filter_func(list_node);
+      if (add_to_new_list) {
+        T added_data = list_node->value;
+        std::cout << " pushing " << added_data->key << '\n';
+        filtered_list->push(added_data);
+      }
+      list_node = list_node->next;
+    }
+    return filtered_list;
+  }
 
   int length() {
     return size;
@@ -57,32 +84,3 @@ class LinkedList {
     std::cout << std::endl;
   };
 };
-
-int main() {
-  LinkedList<int> llInt;
-  LinkedList<std::string> llStr;
-  std::cout << std::endl << "_____START____ " << std::endl;
-
-  llInt.push(1);
-  llInt.push(2);
-  llInt.push(3);
-  llInt.push(4);
-  llInt.print();
-  int val1 = llInt.pop();
-  std::cout << "val1 " << val1 << std::endl;
-  int val2 = llInt.pop();
-  std::cout << "val2 " << val2 << std::endl;
-  llInt.print();
-
-  llStr.push("hello");
-  llStr.push("again");
-  llStr.push("does");
-  llStr.push("this");
-  llStr.push("work?");
-  llStr.print();
-  std::string str1 = llStr.pop();
-  std::cout << "val1 " << str1 << std::endl;
-  std::string str2 = llStr.pop();
-  std::cout << "val2 " << str2 << std::endl;
-  llStr.print();
-}
